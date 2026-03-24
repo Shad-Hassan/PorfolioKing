@@ -122,6 +122,43 @@ body {
   background-clip: text;
 }
 
+/* Nav halo — active section indicator */
+@keyframes halo-pulse {
+  0% {
+    box-shadow:
+      0 0 0 1px rgba(147,61,201,0.9),
+      0 0 0 1px rgba(147,61,201,0.25),
+      0 0 16px rgba(147,61,201,0.5);
+  }
+  55% {
+    box-shadow:
+      0 0 0 1px rgba(147,61,201,0.9),
+      0 0 0 6px rgba(147,61,201,0.1),
+      0 0 26px rgba(147,61,201,0.65);
+  }
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(147,61,201,0.9),
+      0 0 0 11px rgba(147,61,201,0),
+      0 0 16px rgba(147,61,201,0.5);
+  }
+}
+.nav-halo {
+  background: radial-gradient(ellipse at 50% 40%, rgba(147,61,201,0.22) 0%, rgba(83,17,143,0.12) 55%, transparent 80%);
+  animation: halo-pulse 2.2s ease-in-out infinite;
+  border-radius: 9999px;
+  /* inset highlight for 3-D depth */
+  outline: 1px solid transparent;
+}
+.nav-halo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+
 /* Tag chip */
 .tech-tag {
   background: rgba(83, 17, 143, 0.25);
