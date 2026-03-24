@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-void: #000000;
+  --color-obsidian: #242424;
+  --color-ivory: #FBFAEE;
+  --color-purple: #933DC9;
+  --color-deepPurple: #53118F;
+
+  --font-orbitron: 'Orbitron', monospace;
+  --font-rajdhani: 'Rajdhani', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  background-color: #000000;
+  color: #FBFAEE;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #000000; }
+::-webkit-scrollbar-thumb { background: #933DC9; border-radius: 2px; }
+
+/* Selection */
+::selection { background: #933DC9; color: #FBFAEE; }
+
+/* Noise texture overlay */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* Glow utilities */
+.glow-purple {
+  box-shadow: 0 0 30px rgba(147, 61, 201, 0.3), 0 0 80px rgba(147, 61, 201, 0.08);
+}
+.glow-purple-sm {
+  box-shadow: 0 0 15px rgba(147, 61, 201, 0.4);
+}
+.glow-purple-text {
+  text-shadow: 0 0 25px rgba(147, 61, 201, 0.7), 0 0 50px rgba(147, 61, 201, 0.3);
+}
+
+/* Bento card base */
+.bento-card {
+  background: rgba(36, 36, 36, 0.6);
+  border: 1px solid rgba(147, 61, 201, 0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+}
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(147, 61, 201, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.bento-card:hover {
+  border-color: rgba(147, 61, 201, 0.4);
+  box-shadow: 0 0 40px rgba(147, 61, 201, 0.12);
+}
+
+/* Scan line animation */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.scanline::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(147, 61, 201, 0.15), transparent);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* Purple line accent */
+.line-accent {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #933DC9, transparent);
+}
+
+/* Text gradient utility */
+.text-gradient-purple {
+  background: linear-gradient(135deg, #FBFAEE 0%, #933DC9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Tag chip */
+.tech-tag {
+  background: rgba(83, 17, 143, 0.25);
+  border: 1px solid rgba(147, 61, 201, 0.3);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #FBFAEE;
+  text-transform: uppercase;
+}
