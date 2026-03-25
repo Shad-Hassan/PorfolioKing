@@ -67,7 +67,7 @@ export default function HeroSection() {
 
       {/* ── Typography block ────────────────────────────────── */}
       <div
-        className="max-w-7xl mx-auto px-6 lg:px-16 w-full"
+        className="w-full xl:w-300 2xl:w-350 mx-auto px-6 lg:px-16"
         style={{ position: 'relative', zIndex: 2 }}
       >
         <div className="max-w-xl">

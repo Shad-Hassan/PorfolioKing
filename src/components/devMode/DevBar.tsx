@@ -26,6 +26,8 @@ export default function DevBar() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const dispatch    = useAppDispatch()
   const devState    = useAppSelector(s => s.dev)
+  const activeFrame   = useAppSelector(s => s.ui.activeFrame)
+  const activeSection = useAppSelector(s => s.ui.activeSection)
 
   const isHidden = countdown !== null
 
@@ -200,6 +202,51 @@ export default function DevBar() {
                   </div>
                 )
               })}
+            </div>
+
+            {/* Active frame preview */}
+            <div style={{
+              marginTop: '14px', paddingTop: '12px',
+              borderTop: '1px solid rgba(255,220,60,0.08)',
+            }}>
+              <div style={{
+                fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: '9px',
+                letterSpacing: '0.2em', color: 'rgba(255,212,59,0.45)',
+                textTransform: 'uppercase', marginBottom: '8px',
+              }}>Active Frame</div>
+              <div style={{
+                borderRadius: '6px',
+                border: '1px solid rgba(147,61,201,0.25)',
+                overflow: 'hidden',
+                background: 'rgba(147,61,201,0.06)',
+                position: 'relative',
+              }}>
+                <img
+                  src={`/frames/frame${activeFrame + 1}.png`}
+                  alt={`frame${activeFrame + 1}`}
+                  style={{
+                    width: '100%', height: '90px',
+                    objectFit: 'contain',
+                    display: 'block',
+                    padding: '4px',
+                  }}
+                />
+                <div style={{
+                  position: 'absolute', bottom: 0, left: 0, right: 0,
+                  padding: '4px 6px',
+                  background: 'rgba(0,0,0,0.65)',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                }}>
+                  <span style={{
+                    fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, fontSize: '10px',
+                    color: 'rgba(147,61,201,0.9)', letterSpacing: '0.1em', textTransform: 'uppercase',
+                  }}>{activeSection}</span>
+                  <span style={{
+                    fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '9px',
+                    color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em',
+                  }}>frame{activeFrame + 1}.png</span>
+                </div>
+              </div>
             </div>
 
             {/* Footer */}

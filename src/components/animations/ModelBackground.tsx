@@ -1,81 +1,55 @@
 import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FRAME_COUNT, FRAMES_BASE_PATH, FRAMES_EXT } from '@/lib/constants'
+import { useAppDispatch } from '@/hooks/reduxHooks'
+import { setActiveFrame } from '@/hooks/uiSlice'
 
-gsap.registerPlugin(ScrollTrigger)
+const SECTION_NAMES: Record<number, string> = {
+  1: 'hero', 2: 'about', 3: 'experience', 4: 'skills', 5: 'projects', 6: 'contact',
+}
 
-const SECTION_FRAME_MAP: Record<string, number> = {
-  hero:       0,
-  about:      1,
-  experience: 2,
-  skills:     3,
-  projects:   4,
-  contact:    5,
+// Preload all frames up front so swaps are instant
+const preloadedFrames: HTMLImageElement[] = []
+for (let i = 1; i <= FRAME_COUNT; i++) {
+  const img = new Image()
+  img.src = `${FRAMES_BASE_PATH}${i}${FRAMES_EXT}`
+  preloadedFrames.push(img)
 }
 
 export default function ModelBackground() {
-  const imgARef = useRef<HTMLImageElement>(null)
-  const imgBRef = useRef<HTMLImageElement>(null)
-  const activeSlot = useRef<'a' | 'b'>('a')
-  const currentFrame = useRef(0)
-
-  const crossfadeTo = (frameIndex: number) => {
-    if (frameIndex === currentFrame.current) return
-    if (frameIndex < 0 || frameIndex >= FRAME_COUNT) return
-
-    const incoming = activeSlot.current === 'a' ? imgBRef.current : imgARef.current
-    const outgoing  = activeSlot.current === 'a' ? imgARef.current : imgBRef.current
-    if (!incoming || !outgoing) return
-
-    incoming.src = `${FRAMES_BASE_PATH}${frameIndex + 1}${FRAMES_EXT}`
-    gsap.set(incoming, { opacity: 0, zIndex: 2 })
-    gsap.set(outgoing,  { zIndex: 1 })
-
-    gsap.to(incoming, {
-      opacity: 1,
-      duration: 0.7,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        gsap.set(outgoing, { opacity: 0 })
-        activeSlot.current = activeSlot.current === 'a' ? 'b' : 'a'
-        currentFrame.current = frameIndex
-      },
-    })
-  }
+  const imgRef      = useRef<HTMLImageElement>(null)
+  const currentFrame = useRef(-1)
+  const rafPending   = useRef(false)
+  const dispatch     = useAppDispatch()
 
   useEffect(() => {
-    // Preload all frames
-    for (let i = 1; i <= FRAME_COUNT; i++) {
-      const img = new Image()
-      img.src = `${FRAMES_BASE_PATH}${i}${FRAMES_EXT}`
+    const setFrame = (index: number) => {
+      if (index === currentFrame.current) return
+      currentFrame.current = index
+      if (imgRef.current)
+        imgRef.current.src = `${FRAMES_BASE_PATH}${index}${FRAMES_EXT}`
+      dispatch(setActiveFrame({ frame: index, section: SECTION_NAMES[index] ?? 'hero' }))
     }
 
-    if (imgARef.current) {
-      imgARef.current.src = `${FRAMES_BASE_PATH}1${FRAMES_EXT}`
-      gsap.set(imgARef.current, { opacity: 1, zIndex: 1 })
+    const onScroll = () => {
+      if (rafPending.current) return
+      rafPending.current = true
+      requestAnimationFrame(() => {
+        rafPending.current = false
+        const max      = document.documentElement.scrollHeight - window.innerHeight
+        const progress = max > 0 ? window.scrollY / max : 0
+        // Map 0–100% scroll → frames 1–6
+        const index    = Math.min(FRAME_COUNT, Math.max(1, Math.ceil(progress * FRAME_COUNT) || 1))
+        setFrame(index)
+      })
     }
-    if (imgBRef.current) {
-      gsap.set(imgBRef.current, { opacity: 0, zIndex: 0 })
-    }
 
-    const triggers: ScrollTrigger[] = []
-    Object.entries(SECTION_FRAME_MAP).forEach(([id, frameIndex]) => {
-      const el = document.getElementById(id)
-      if (!el) return
-      triggers.push(ScrollTrigger.create({
-        trigger: el,
-        start: 'top 60%',
-        onEnter:     () => crossfadeTo(frameIndex),
-        onEnterBack: () => crossfadeTo(frameIndex),
-      }))
-    })
+    // Set initial frame
+    setFrame(1)
 
-    return () => triggers.forEach(t => t.kill())
-  }, [])
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [dispatch])
 
-  // 82vh height + nudge down by half the navbar (52px) so the breathing room
-  // above and below the figure feels visually even despite the fixed nav.
   const imgStyle: React.CSSProperties = {
     position:  'absolute',
     top:       '50%',
@@ -95,19 +69,15 @@ export default function ModelBackground() {
       style={{ zIndex: 0 }}
       aria-hidden="true"
     >
-      {/* Base */}
-      <div className="absolute inset-0" style={{ background: '#000' }} />
-
-      {/* Model images — centered in viewport */}
-      <img ref={imgARef} alt="" style={imgStyle} />
-      <img ref={imgBRef} alt="" style={imgStyle} />
+      {/* Single image slot — instant swap, no crossfade */}
+      <img ref={imgRef} alt="" style={imgStyle} />
 
       {/* Purple halo — centered behind the model */}
       <div className="absolute inset-0" style={{
         background: 'radial-gradient(ellipse 40% 70% at 50% 50%, rgba(83,17,143,0.35) 0%, rgba(147,61,201,0.08) 45%, transparent 70%)',
       }} />
 
-      {/* Edge vignette — darkens all four sides so content is readable */}
+      {/* Edge vignette */}
       <div className="absolute inset-0" style={{
         background: `
           linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 18%, transparent 78%, rgba(0,0,0,0.9) 100%),

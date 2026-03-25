@@ -97,6 +97,6 @@ export const SKILLS: SkillCategory[] = [
   },
 ]
 
-export const FRAME_COUNT = 6
+export const FRAME_COUNT = 6           // frame1.png → frame6.png
 export const FRAMES_BASE_PATH = '/frames/frame'
 export const FRAMES_EXT = '.png'

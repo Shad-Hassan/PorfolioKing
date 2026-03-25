@@ -8,6 +8,8 @@ export interface UIState {
   navCta:        boolean        // desktop "Hire Me" hovered
   mobileMenuLink: string | null // mobile overlay link hovered
   mobileClose:   boolean        // mobile overlay close button hovered
+  activeFrame:   number         // currently visible model frame index (0-based)
+  activeSection: string         // section id that triggered the frame
 }
 
 const initialState: UIState = {
@@ -16,6 +18,8 @@ const initialState: UIState = {
   navCta:         false,
   mobileMenuLink: null,
   mobileClose:    false,
+  activeFrame:    1,
+  activeSection:  'hero',
 }
 
 const uiSlice = createSlice({
@@ -27,6 +31,10 @@ const uiSlice = createSlice({
     setNavCta:         (state, action: PayloadAction<boolean>)        => { state.navCta          = action.payload },
     setMobileMenuLink: (state, action: PayloadAction<string | null>)  => { state.mobileMenuLink  = action.payload },
     setMobileClose:    (state, action: PayloadAction<boolean>)        => { state.mobileClose     = action.payload },
+    setActiveFrame:    (state, action: PayloadAction<{ frame: number; section: string }>) => {
+      state.activeFrame   = action.payload.frame
+      state.activeSection = action.payload.section
+    },
   },
 })
 
@@ -36,6 +44,7 @@ export const {
   setNavCta,
   setMobileMenuLink,
   setMobileClose,
+  setActiveFrame,
 } = uiSlice.actions
 
 export default uiSlice.reducer

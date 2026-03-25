@@ -17,7 +17,7 @@ export default function ContactSection() {
   }, [])
 
   return (
-    <section id="contact" style={{ padding: '120px 0 80px', maxWidth: '1280px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+    <section id="contact" className="w-full xl:w-300 2xl:w-350 mx-auto" style={{ padding: '120px 24px 80px' }}>
 
       <div ref={cardRef} style={{
         background: 'rgba(10,10,10,0.85)',

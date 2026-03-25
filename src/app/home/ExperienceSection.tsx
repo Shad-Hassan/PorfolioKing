@@ -20,7 +20,7 @@ export default function ExperienceSection() {
   }, [])
 
   return (
-    <section id="experience" style={{ padding: '120px 0', maxWidth: '1280px', margin: '0 auto', paddingLeft: '24px', paddingRight: '24px' }}>
+    <section id="experience" className="w-full xl:w-300 2xl:w-350 mx-auto" style={{ padding: '120px 24px' }}>
       <RevealText style={{ marginBottom: '48px' }}>
         <p style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, fontSize: '11px', letterSpacing: '0.5em', color: '#933DC9', textTransform: 'uppercase', marginBottom: '12px' }}>
           02 // Experience
