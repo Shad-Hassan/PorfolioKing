@@ -7,10 +7,10 @@ gsap.registerPlugin(ScrollTrigger)
 
 const SECTIONS = ['hero', 'about', 'experience', 'skills', 'projects', 'contact']
 
-const PILL_H     = 52   // total pill height
-const LINK_PAD_X = 14   // horizontal padding per nav link
-const HALO_H     = 36   // halo capsule height
-const HALO_PAD   = 10   // halo overshoots link text on each side
+const PILL_H     = 64   // total pill height
+const LINK_PAD_X = 22   // horizontal padding per nav link
+const HALO_H     = 44   // halo capsule height
+const HALO_PAD   = 12   // halo overshoots link text on each side
 
 export default function Navbar() {
   // ── refs ────────────────────────────────────────────────
@@ -146,7 +146,7 @@ export default function Navbar() {
   }
 
   const divider = (
-    <div style={{ width: '1px', height: '18px', background: 'rgba(147,61,201,0.15)', flexShrink: 0, margin: '0 6px' }} />
+    <div style={{ width: '1px', height: '22px', background: 'rgba(147,61,201,0.2)', flexShrink: 0, margin: '0 10px' }} />
   )
 
   return (
@@ -223,8 +223,8 @@ export default function Navbar() {
               <span key={i} ref={el => { if (el) letterRefs.current[i] = el }} style={{
                 fontFamily:    'Orbitron, monospace',
                 fontWeight:    900,
-                fontSize:      '13px',
-                letterSpacing: '0.12em',
+                fontSize:      '16px',
+                letterSpacing: '0.16em',
                 display:       'inline-block',
                 color:         i >= 3 ? '#933DC9' : '#FBFAEE',
               }}>{ch}</span>
@@ -246,9 +246,9 @@ export default function Navbar() {
                 onClick={e => { e.preventDefault(); scrollTo(link.href) }}
                 style={{
                   fontFamily:     'Rajdhani, sans-serif',
-                  fontWeight:     600,
-                  fontSize:       '12px',
-                  letterSpacing:  '0.15em',
+                  fontWeight:     700,
+                  fontSize:       '14px',
+                  letterSpacing:  '0.18em',
                   textTransform:  'uppercase',
                   textDecoration: 'none',
                   padding:        `0 ${LINK_PAD_X}px`,
@@ -279,12 +279,12 @@ export default function Navbar() {
           style={{
             fontFamily:     'Rajdhani, sans-serif',
             fontWeight:     700,
-            fontSize:       '12px',
+            fontSize:       '14px',
             letterSpacing:  '0.2em',
             textTransform:  'uppercase',
             textDecoration: 'none',
-            height:         '40px',
-            padding:        '0 22px',
+            height:         '48px',
+            padding:        '0 28px',
             display:        'flex',
             alignItems:     'center',
             borderRadius:   '9999px',
